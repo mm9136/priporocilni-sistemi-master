@@ -1,0 +1,12 @@
+kumuluzee:
+  name: priporocilni-sistem
+  version: 1.0.0
+  env:
+    name: dev
+  openapi:
+    ui:
+      enaled: true
+  server:
+    base-url: http://localhost:8081
+    http:
+      port: 8081
