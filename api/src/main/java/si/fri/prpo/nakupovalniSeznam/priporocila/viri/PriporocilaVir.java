@@ -30,6 +30,7 @@ public class PriporocilaVir extends Application {
     private void init(){
         log.info("Inicializacija zrna "+ PriporocilaVir.class.getSimpleName());
         priporocila = new HashMap<>();
+        //priporocila.put(new Artikel("Suknja"), 4);
     }
 
     @PreDestroy
