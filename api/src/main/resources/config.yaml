@@ -1,5 +1,5 @@
 kumuluzee:
-  name: priporocilni-sistem
+  name: priporocilni-sistemi
   version: 1.0.0
   env:
     name: dev
@@ -7,10 +7,6 @@ kumuluzee:
     ui:
       enaled: true
   server:
-    base-url: http://localhost:8081
+    base-url: http://localhost:8081/v1
     http:
       port: 8081
-  health:
-    checks:
-      disk-space-health-check:
-        threshold: 100000000

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>si.fri.prpo.nakupovalni-seznam.priporocila</groupId>
+    <groupId>si.fri.prpo.nakupovalniSeznam.priporocila</groupId>
     <artifactId>priporocilni-sistemi-master</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
@@ -17,6 +17,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <kumuluzee.version>3.5.0</kumuluzee.version>
         <postgresql.version>42.2.8</postgresql.version>
@@ -49,7 +50,7 @@
                 <version>${kumuluzee-openapi.version}</version>
             </dependency>
             <dependency>
-                <groupId>si.fri.prpo.nakupovalni-seznam.priporocila</groupId>
+                <groupId>si.fri.prpo.nakupovalniSeznam.priporocila</groupId>
                 <artifactId>api</artifactId>
                 <version>${project.version}</version>
             </dependency>

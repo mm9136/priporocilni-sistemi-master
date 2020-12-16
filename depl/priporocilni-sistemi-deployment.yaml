@@ -6,15 +6,15 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: priporocilni-sistem
+      app: priporocilni-sistemi
   template:
     metadata:
       labels:
-        app: priporocilni-sistem
+        app: priporocilni-sistemi
     spec:
       containers:
-        - image: aquawhale/priporocilni-sistem
-          name: priporocilni-sistem
+        - image: aquawhale/priporocilni-sistemi
+          name: priporocilni-sistemi
           ports:
             - containerPort: 8081
               name: server
@@ -37,7 +37,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: priporocilni-sistem
+  name: priporocilni-sistemi
 spec:
   type: ClusterIP
   ports:
@@ -45,4 +45,4 @@ spec:
       protocol: TCP
       targetPort: server
   selector:
-    app: priporocilni-sistem
+    app: priporocilni-sistemi
