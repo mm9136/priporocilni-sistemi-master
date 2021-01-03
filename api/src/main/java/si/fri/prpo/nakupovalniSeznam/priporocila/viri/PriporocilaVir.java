@@ -5,17 +5,24 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+import java.io.StringReader;
+import java.security.Key;
 import java.util.*;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.json.Json;
 import javax.json.bind.JsonbBuilder;
+import javax.json.stream.JsonParser;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import kong.unirest.json.JSONObject;
+import org.apache.http.HttpEntity;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.jetty.client.HttpClient;
 import si.fri.prpo.nakupovalniSeznam.priporocila.dtos.Artikel;
 import javax.annotation.PostConstruct;
@@ -34,7 +41,6 @@ public class PriporocilaVir extends Application {
 
 //    @Inject
 //    private SpellCheckApiOdjemalec spellCheckApiOdjemalec;
-
     @PostConstruct
     private void init(){
         log.info("Inicializacija zrna "+ PriporocilaVir.class.getSimpleName());
@@ -78,31 +84,35 @@ public class PriporocilaVir extends Application {
     public boolean dodajVnos(Artikel artikel){
 
 
-        //vaje 8
-//        if(!spellCheckApiOdjemalec.jeUstreznoCrkovan(naziv)){
-//            //return Response.status(Response.Status.BAD_REQUEST).build();
-//            return false;
-//       }
         String naziv = artikel.getNaziv();
         HttpResponse<String> response = null;
+        String strResponse = "";
         try{
-            response = Unirest.get("https://montanaflynn-spellcheck.p.rapidapi.com/check/?text=" + naziv)
+            response = Unirest.get("https://montanaflynn-spellcheck.p.rapidapi.com/check/?text=This%20sentnce%20has%20some%20probblems.")
                     .header("x-rapidapi-key", "c1a417f21cmshf584f138be3c98bp1eb29fjsn2995f2f6e3ac")
                     .header("x-rapidapi-host", "montanaflynn-spellcheck.p.rapidapi.com")
                     .asString();
+
+            strResponse = response.getBody();
         }catch (WebApplicationException | ProcessingException e){
             log.severe(e.getMessage());
             throw new InternalServerErrorException(e);
 
         }
+        JsonParser parser = Json.createParser(new StringReader(strResponse));
+        while (parser.hasNext()) {
+            JsonParser.Event event = parser.next();
+            String original = parser.getObject().get("original").toString();
+            String suggestion =  parser.getObject().get("suggestion").toString();
+            System.out.println(original);
+            System.out.println(suggestion);
+            if(!original.equals(suggestion)){
+                log.info("Napaka pri crkovanju besede: " + original + " a ste morda mislili:" + suggestion);
+                return false;
+            }
+        }
 
-        if((response.original).equals(response.suggestion)){
-            return true;
-        }
-        else {
-            log.info("Napaka pri crkovanju besede: " + response.original + " a ste morda mislili:" + response.suggestion);
-            return false;
-        }
+
 
         /////
          ////vaje 7
