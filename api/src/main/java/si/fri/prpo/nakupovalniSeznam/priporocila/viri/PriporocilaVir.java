@@ -1,5 +1,6 @@
 package si.fri.prpo.nakupovalniSeznam.priporocila.viri;
 
+import com.arjuna.ats.internal.arjuna.objectstore.TwoPhaseVolatileStore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,10 +8,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.*;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import si.fri.prpo.nakupovalniSeznam.priporocila.dtos.Artikel;
 
+import kong.unirest.HttpRequest;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
+import org.eclipse.jetty.client.HttpClient;
+import si.fri.prpo.nakupovalniSeznam.priporocila.dtos.Artikel;
 import javax.annotation.PostConstruct;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -25,6 +32,8 @@ public class PriporocilaVir extends Application {
 
     private Map<String, Integer> priporocila;
 
+//    @Inject
+//    private SpellCheckApiOdjemalec spellCheckApiOdjemalec;
 
     @PostConstruct
     private void init(){
@@ -66,8 +75,37 @@ public class PriporocilaVir extends Application {
                             schema = @Schema(implementation = Artikel.class))
             )})
     @POST
-    public Response dodajVnos(Artikel artikel){
+    public boolean dodajVnos(Artikel artikel){
+
+
+        //vaje 8
+//        if(!spellCheckApiOdjemalec.jeUstreznoCrkovan(naziv)){
+//            //return Response.status(Response.Status.BAD_REQUEST).build();
+//            return false;
+//       }
         String naziv = artikel.getNaziv();
+        HttpResponse<String> response = null;
+        try{
+            response = Unirest.get("https://montanaflynn-spellcheck.p.rapidapi.com/check/?text=" + naziv)
+                    .header("x-rapidapi-key", "c1a417f21cmshf584f138be3c98bp1eb29fjsn2995f2f6e3ac")
+                    .header("x-rapidapi-host", "montanaflynn-spellcheck.p.rapidapi.com")
+                    .asString();
+        }catch (WebApplicationException | ProcessingException e){
+            log.severe(e.getMessage());
+            throw new InternalServerErrorException(e);
+
+        }
+
+        if((response.original).equals(response.suggestion)){
+            return true;
+        }
+        else {
+            log.info("Napaka pri crkovanju besede: " + response.original + " a ste morda mislili:" + response.suggestion);
+            return false;
+        }
+
+        /////
+         ////vaje 7
         if(!priporocila.containsKey(naziv)){
             priporocila.put(naziv,1);
         } else {
@@ -75,7 +113,9 @@ public class PriporocilaVir extends Application {
         }
 
         log.info("Priporocila posodobljena. Nova vrednost " + priporocila.get(naziv));
-        return Response.status(Response.Status.CREATED).build();
+        return true;
+        //return Response.ok.build();
+
     }
 
     @Operation(description = "Odstrani eno sikanje artikla iz priporočil.", summary = "Odstrani eno sikanje artikla iz priporočil",

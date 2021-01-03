@@ -10,3 +10,7 @@ kumuluzee:
     base-url: http://localhost:8081/v1
     http:
       port: 8081
+integration-properties:
+  spellcheck-api:
+    host: montanaflynn-spellcheck.p.rapidapi.com
+    api-key: c1a417f21cmshf584f138be3c98bp1eb29fjsn2995f2f6e3ac

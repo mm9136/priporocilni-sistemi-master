@@ -13,7 +13,7 @@ spec:
         app: priporocilni-sistemi
     spec:
       containers:
-        - image: aquawhale/priporocilni-sistemi
+        - image: mm9136/priporocilni-sistemi
           name: priporocilni-sistemi
           ports:
             - containerPort: 8081

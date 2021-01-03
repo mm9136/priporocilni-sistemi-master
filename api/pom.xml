@@ -41,6 +41,18 @@
             <artifactId>kumuluzee-openapi-ui</artifactId>
         </dependency>
         <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>2.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Pull in as a traditional dependency -->
+        <dependency>
+            <groupId>com.konghq</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>3.11.04</version>
+        </dependency>
+        <dependency>
             <groupId>com.kumuluz.ee</groupId>
             <artifactId>kumuluzee-cdi-weld</artifactId>
         </dependency>
@@ -69,7 +81,7 @@
                     <execution>
                         <id>package</id>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>repackage</goal>
                         </goals>
                     </execution>
                 </executions>

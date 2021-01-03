@@ -9,5 +9,8 @@
         <module name="api" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="storitve" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
