@@ -112,8 +112,6 @@ public class PriporocilaVir extends Application {
             }
         }
 
-
-
         /////
          ////vaje 7
         if(!priporocila.containsKey(naziv)){
